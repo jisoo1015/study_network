@@ -21,6 +21,40 @@ $ ./check_ports.sh 80 443 22 3000 8080
 
 총 5개 포트 중 3개가 사용 중입니다.
 
+```
+#!/bin/bash
+    
+total="$#"
+port_in_use=0
+    
+echo "포트 사용 상태 확인 중..."
+echo
+    
+for port in "$@"
+do          
+        if ss -tulnp | grep -q ":"${port}" " ; then
+                echo "포트 "${port}": ✓ 사용 중"
+                port_in_use=$(( port_in_use + 1 ))
+        else        
+                echo "포트 "${port}": ✗ 사용 안함"
+        fi
+            
+done
+    
+echo
+echo "총 "${total}"개 포트 중 "${port_in_use}"개가 사용 중입니다."
+```
+[kimjisoo@192.168.0.38 ~]$ bash check_port_js.sh 5353 323 7777 6666
+포트 사용 상태 확인 중...
+
+포트 5353: ✓ 사용 중
+포트 323: ✓ 사용 중
+포트 7777: ✓ 사용 중
+포트 6666: ✓ 사용 중
+
+총 4개 포트 중 4개가 사용 중입니다.
+```
+
 
 ## 연습문제 2: 특정 포트 프로세스 종료 스크립트
 문제: 특정 포트를 사용하는 프로세스를 찾아서 종료하는 스크립트를 작성하세요.
